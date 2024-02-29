@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import * as echarts from 'echarts';
 import type { CSSProperties } from 'react';
 
@@ -63,10 +63,6 @@ export function ReactECharts({
 
   const chartSettings = {
     ...settings,
-    // tooltip: {
-    //   trigger: 'axis',
-    //   ...settings,
-    // },
   };
 
   useEffect(() => {
@@ -74,25 +70,17 @@ export function ReactECharts({
     const chart = echarts.getInstanceByDom(chartRef.current);
     if (chart) {
       chart.setOption({ ...option, ...chartSettings });
-      // if (onEvents && onEvents.type === 'mousemove') {
-      //   chart.off('mousemove');
-      //   chart.on('mousemove', function (params: any) {
-      //     if (params && params.data) {
-      //       const { name, value } = params.data;
-      //       chart.dispatchAction({
-      //         type: 'showTip',
-      //         seriesIndex: 0,
-      //         dataIndex: params.dataIndex,
-      //         name: name,
-      //         value: value,
-      //       });
-      //     }
-      //   });
-      // }
+      if (onEvents && onEvents.type === 'mousemove') {
+        chart.off('mousemove');
+        chart.on('mousemove', function (params: any) {
+          if (params && params.data) {
+            const { name, value } = params.data;
+          }
+        });
+      }
     }
   }
 }, [option, settings, onEvents, theme]);
-
 
 
   useEffect(() => {

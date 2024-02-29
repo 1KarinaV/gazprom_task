@@ -77,6 +77,35 @@ const DataComponent = () => {
             const yAxisData = filteredData.map(item => item.value);
 
             const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    type: 'showTip',
+                    seriesIndex: 0,
+                    formatter: (params: any) => {
+                        const dataIndex = params[0].dataIndex;
+                        const date = `<span style="font-weight: bold; font-size: 16px">${xAxisData[dataIndex]}</span>`;
+                        const currencyValue = `<span style="font-weight: bold; font-size: 16px">${yAxisData[dataIndex]}</span>`;
+                        const currencySymbol = `<span style="font-weight: bold; font-size: 16px">₽</span>`;
+                        let selectedCurrency;
+                        switch (currency) {
+                            case 'USD':
+                                selectedCurrency = 'Курс доллара';
+                                break;
+                            case 'EUR':
+                                selectedCurrency = 'Курс евро';
+                                break;
+                            case 'CNY':
+                                selectedCurrency = 'Курс юаня';
+                                break;
+                            default:
+                                selectedCurrency = '';
+                        }
+                        const selectedCurrencyFormatted = `<span style="font-weight: normal; font-size: 12px">${selectedCurrency}</span>`;
+                        const circleStyle = "width: 12px; height: 12px; border-radius: 50%; background-color: #F38B00; display: inline-block; margin-right: 5px;";
+                        return `${date}<br><span style="${circleStyle}"></span>${selectedCurrencyFormatted}: <span style="margin-right: 10px"></span>${currencyValue}${currencySymbol}`;
+
+                    }
+                },
                 xAxis: {
                     type: 'category',
                     data: xAxisData,
@@ -108,10 +137,8 @@ const DataComponent = () => {
                         color: '#F38B00'
                     }
                 }],
-                tooltip: {
-                    trigger: 'axis',
-                }
             };
+
             setChartData(option);
 
             const average = calculateAverage(filteredData);
